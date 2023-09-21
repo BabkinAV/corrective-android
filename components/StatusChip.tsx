@@ -1,11 +1,12 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { Chip } from 'react-native-paper';
+import { instructionStatus } from '../types';
 
 const StatusChip = ({
   status,
 }: {
-  status: 'confirmed' | 'open' | 'refused';
+  status: instructionStatus;
 }) => {
   const chipColors = {
 		confirmed: '#008000',

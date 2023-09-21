@@ -1,25 +1,42 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import StatusChip from '../components/StatusChip';
 import { theme } from '../theme';
 import * as Linking from 'expo-linking';
+import { instructionStatus } from '../types';
 
-const InstructionItem = () => {
+const InstructionItem = ({
+  instructionNumber,
+  instructionTitle,
+  documentType,
+  subsystem,
+  date,
+  downloadLink,
+	status
+}: {
+  instructionNumber: string;
+  instructionTitle: string;
+  documentType: string;
+  subsystem: string;
+  date: string;
+  downloadLink: string;
+	status: instructionStatus
+}) => {
   return (
     <View style={styles.instructionContainer}>
       <View style={styles.instructionNumberContainer}>
         <Text variant="bodyLarge" style={styles.instructionNumber}>
-          BD-21-01
+          {instructionNumber}
         </Text>
         <View style={styles.chipContainer}>
-          <StatusChip status='refused'/>
+          <StatusChip status={status} />
         </View>
       </View>
       <View style={styles.instructionTitleContainer}>
         <Text variant="bodyLarge" style={styles.instructionTitle}>
-          Some title of instruction Lorem ipsum dolor sit amet, consectetur
-          adipiscing elit. Proin placer
+          {instructionTitle}
         </Text>
       </View>
       <View style={styles.instructionBodyContainer}>
@@ -31,7 +48,7 @@ const InstructionItem = () => {
             variant="bodyLarge"
             style={{ flexShrink: 1, textAlign: 'right' }}
           >
-            Technical information
+            {documentType}
           </Text>
         </View>
         <View style={styles.documentTypeContainer}>
@@ -42,7 +59,7 @@ const InstructionItem = () => {
             variant="bodyLarge"
             style={{ flexShrink: 1, textAlign: 'right' }}
           >
-            Software
+            {subsystem}
           </Text>
         </View>
         <View style={styles.documentTypeContainer}>
@@ -53,7 +70,7 @@ const InstructionItem = () => {
             variant="bodyLarge"
             style={{ flexShrink: 1, textAlign: 'right' }}
           >
-            12.08.2018
+            {dayjs(date).format('DD.MM.YYYY')}
           </Text>
         </View>
         <Button
@@ -61,9 +78,7 @@ const InstructionItem = () => {
           style={styles.downloadButton}
           uppercase
           onPress={() =>
-            Linking.openURL(
-              process.env.EXPO_PUBLIC_STATIC_URL + '/docs/111.pdf'
-            )
+            Linking.openURL(process.env.EXPO_PUBLIC_STATIC_URL + downloadLink)
           }
         >
           Download
@@ -78,6 +93,7 @@ export default InstructionItem;
 const styles = StyleSheet.create({
   instructionContainer: {},
   instructionNumberContainer: {
+		paddingTop: 15, 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -85,7 +101,7 @@ const styles = StyleSheet.create({
   },
   chipContainer: {
     position: 'absolute',
-    top: 0,
+    top: 15,
     right: 0,
   },
   instructionTitleContainer: {
