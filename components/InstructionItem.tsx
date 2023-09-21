@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import StatusChip from '../components/StatusChip';
 import { theme } from '../theme';
+import * as Linking from 'expo-linking';
 
 const InstructionItem = () => {
   return (
@@ -12,7 +13,7 @@ const InstructionItem = () => {
           BD-21-01
         </Text>
         <View style={styles.chipContainer}>
-          <StatusChip />
+          <StatusChip status='refused'/>
         </View>
       </View>
       <View style={styles.instructionTitleContainer}>
@@ -26,7 +27,10 @@ const InstructionItem = () => {
           <Text variant="bodyLarge" style={{ flexShrink: 1 }}>
             Document type
           </Text>
-          <Text variant="bodyLarge" style={{ flexShrink: 1, textAlign: 'right' }}>
+          <Text
+            variant="bodyLarge"
+            style={{ flexShrink: 1, textAlign: 'right' }}
+          >
             Technical information
           </Text>
         </View>
@@ -34,18 +38,36 @@ const InstructionItem = () => {
           <Text variant="bodyLarge" style={{ flexShrink: 1 }}>
             Subsystem
           </Text>
-          <Text variant="bodyLarge" style={{ flexShrink: 1, textAlign: 'right' }}>
-            Date
+          <Text
+            variant="bodyLarge"
+            style={{ flexShrink: 1, textAlign: 'right' }}
+          >
+            Software
           </Text>
         </View>
         <View style={styles.documentTypeContainer}>
           <Text variant="bodyLarge" style={{ flexShrink: 1 }}>
+            Date
+          </Text>
+          <Text
+            variant="bodyLarge"
+            style={{ flexShrink: 1, textAlign: 'right' }}
+          >
             12.08.2018
           </Text>
-          <Text variant="bodyLarge" style={{ flexShrink: 1, textAlign: 'right' }}>
-            Software
-          </Text>
         </View>
+        <Button
+          mode="contained"
+          style={styles.downloadButton}
+          uppercase
+          onPress={() =>
+            Linking.openURL(
+              process.env.EXPO_PUBLIC_STATIC_URL + '/docs/111.pdf'
+            )
+          }
+        >
+          Download
+        </Button>
       </View>
     </View>
   );
@@ -77,18 +99,20 @@ const styles = StyleSheet.create({
   },
   instructionBodyContainer: {
     paddingTop: 30,
-		paddingBottom: 5,
+    paddingBottom: 5,
     width: 250,
     marginLeft: 'auto',
     marginRight: 'auto',
-    borderColor: 'red',
-    borderWidth: 1,
-		
   },
   documentTypeContainer: {
     flexDirection: 'row',
     gap: 5,
     justifyContent: 'space-between',
-		paddingBottom: 10
+    paddingBottom: 10,
+  },
+  downloadButton: {
+    marginTop: 20,
+    marginHorizontal: '20%',
+    paddingVertical: 3,
   },
 });

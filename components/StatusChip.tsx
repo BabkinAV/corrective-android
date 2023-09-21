@@ -1,18 +1,42 @@
 import React from 'react';
+import { Image, StyleSheet } from 'react-native';
 import { Chip } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
-import { theme } from '../theme';
 
-const StatusChip = () => {
+const StatusChip = ({
+  status,
+}: {
+  status: 'confirmed' | 'open' | 'refused';
+}) => {
+  const chipColors = {
+		confirmed: '#008000',
+		open: '#0000FF',
+		refused: '#FF0000'
+	};
+
+  const minusIcon = ({ size }: { size: number; color: string }) => {
+    return <Image
+      source={require('../assets/minusCircleIcon.png')}
+      style={{ width: size, height: size, tintColor: chipColors[status] }}
+    />
+	};
+  const checkIcon = ({ size }: { size: number; color: string }) => {
+    return <Image
+      source={require('../assets/checkIcon.png')}
+      style={{ width: size, height: size, tintColor: chipColors[status] }}
+    />
+	};
+
+	const customIcon = status === 'confirmed' ? checkIcon : minusIcon
+
   return (
     <Chip
-      icon="information"
+      icon={status === 'open' ? 'information' : customIcon}
       mode="outlined"
-      style={styles.statusChip}
+      style={[styles.statusChip, { borderColor: chipColors[status] }]}
       compact
-      textStyle={styles.chipText}
+      textStyle={[styles.chipText, { color: chipColors[status] }]}
     >
-      Open
+      {status}
     </Chip>
   );
 };
@@ -23,7 +47,12 @@ const styles = StyleSheet.create({
   statusChip: {
     borderRadius: 50,
     marginLeft: 'auto',
-    borderColor: theme.colors.primary,
+    padding: 0,
   },
-  chipText: { marginVertical: 1, color: theme.colors.primary },
+  chipText: {
+    marginVertical: 1,
+    fontSize: 12,
+    marginHorizontal: 1,
+    textTransform: 'capitalize',
+  },
 });
