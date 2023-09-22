@@ -4,7 +4,7 @@ import { Button, TextInput } from 'react-native-paper';
 
 const Home = ({ onSearchButtonPress }: { onSearchButtonPress: () => void }) => {
   return (
-    <View>
+    <View style={styles.homeContainer}>
       <TextInput label="Serial no..." style={styles.searchInput} />
       <Button
         mode="contained"
@@ -20,6 +20,9 @@ const Home = ({ onSearchButtonPress }: { onSearchButtonPress: () => void }) => {
 export default Home;
 
 const styles = StyleSheet.create({
+	homeContainer: {
+		paddingTop: 20
+	},
   button: {
     marginTop: 15,
     paddingTop: 5,

@@ -10,7 +10,7 @@ const StatusChip = ({
 }) => {
   const chipColors = {
 		confirmed: '#008000',
-		open: '#0000FF',
+		open: '#3c64b1',
 		refused: '#FF0000'
 	};
 
