@@ -35,5 +35,8 @@ const DocumentList = () => {
 export default DocumentList;
 
 const styles = StyleSheet.create({
-  listContainer: {},
+  listContainer: {
+		paddingLeft: 10,
+    paddingRight: 10,
+	},
 });
