@@ -10,6 +10,8 @@ import DocumentList from './screens/DocumentList';
 import Home from './screens/Home';
 import { theme } from './theme';
 import { RootStackParamList } from './types';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 export type AppTheme = typeof theme;
 
@@ -18,41 +20,45 @@ export const useAppTheme = () => useTheme<AppTheme>();
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
 export default function App() {
-
   return (
-    <PaperProvider theme={theme}>
-      <StatusBar style="light" />
-      <NavigationContainer>
-        <Drawer.Navigator
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: theme.colors.primary,
-            },
-            headerTintColor: 'white',
-						headerTitleAlign: 'center',
-						drawerStyle: {
-							backgroundColor: theme.colors.primary
-						},
-						drawerActiveTintColor: '#fff',
-						drawerInactiveTintColor: '#fff'
-          }}
-        >
-          <Drawer.Screen name="searchUnit" component={Home} options={{title: 'Search unit'}}/>
-          <Drawer.Screen
-            name="documentList"
-            component={DocumentList}
-						initialParams={{ unitNumber: '' }}
-            options={({ route }) => ({
-							title: route.params.unitNumber,
-							headerTitleAlign: 'center',
-              drawerItemStyle: { height: 0 },
-            })}
-          />
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <Provider store={store}>
+      <PaperProvider theme={theme}>
+        <StatusBar style="light" />
+        <NavigationContainer>
+          <Drawer.Navigator
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: theme.colors.primary,
+              },
+              headerTintColor: 'white',
+              headerTitleAlign: 'center',
+              drawerStyle: {
+                backgroundColor: theme.colors.primary,
+              },
+              drawerActiveTintColor: '#fff',
+              drawerInactiveTintColor: '#fff',
+            }}
+          >
+            <Drawer.Screen
+              name="searchUnit"
+              component={Home}
+              options={{ title: 'Search unit' }}
+            />
+            <Drawer.Screen
+              name="documentList"
+              component={DocumentList}
+              initialParams={{ unitNumber: '' }}
+              options={({ route }) => ({
+                title: route.params.unitNumber,
+                headerTitleAlign: 'center',
+                drawerItemStyle: { height: 0 },
+              })}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </Provider>
   );
-
 }
 
 const styles = StyleSheet.create({

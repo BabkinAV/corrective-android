@@ -78,7 +78,7 @@ const InstructionItem = ({
           style={styles.downloadButton}
           uppercase
           onPress={() =>
-            Linking.openURL(process.env.EXPO_PUBLIC_STATIC_URL + downloadLink)
+            Linking.openURL(process.env.EXPO_PUBLIC_API_URL + '/static/' + downloadLink)
           }
         >
           Download
