@@ -5,6 +5,7 @@ export type RootStackParamList = {
   documentList: {
 		unitNumber: string
 	};
+	login: undefined
 };
 
 export interface Instruction {

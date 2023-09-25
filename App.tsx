@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
-import { PaperProvider, useTheme } from 'react-native-paper';
+import { PaperProvider, Text, useTheme } from 'react-native-paper';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -12,6 +12,7 @@ import { theme } from './theme';
 import { RootStackParamList } from './types';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import Login from './screens/Login';
 
 export type AppTheme = typeof theme;
 
@@ -49,11 +50,16 @@ export default function App() {
               component={DocumentList}
               initialParams={{ unitNumber: '' }}
               options={({ route }) => ({
-                title: route.params.unitNumber,
+								title: route.params.unitNumber,
                 headerTitleAlign: 'center',
                 drawerItemStyle: { height: 0 },
               })}
             />
+							<Drawer.Screen
+								name="login"
+								component={Login}
+								options={{ title: 'Login' }}
+							/>
           </Drawer.Navigator>
         </NavigationContainer>
       </PaperProvider>

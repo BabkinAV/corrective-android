@@ -7,48 +7,48 @@ import { useAppDispatch } from '../hooks/reduxHooks';
 import { fetchInstructionsById } from '../store/thunks/fetchInstructions';
 import { RootStackParamList } from '../types';
 
-type Props = DrawerScreenProps<RootStackParamList, 'searchUnit'>;
+// type Props = DrawerScreenProps<RootStackParamList, 'searchUnit'>;
 
-type SearchUnitNavigationProp = Props['navigation'];
+// type SearchUnitNavigationProp = Props['navigation'];
 
-const Home = () => {
-	const navigation = useNavigation<SearchUnitNavigationProp>();
-	
-	const dispatch = useAppDispatch();
-  const [searchInputValue, setSearchInputValue] = useState<string>('');
+const Login = () => {
+  const [formData, setFormData] = useState<{email: string; password: string}>({email: '', password: ''});
 
-  const handleSearchButtonPress = () => {
-    dispatch(fetchInstructionsById(searchInputValue));
-    navigation.navigate('documentList', { unitNumber: searchInputValue });
-  };
+  // const handleSearchButtonPress = () => {
+  //   dispatch(fetchInstructionsById(searchInputValue));
+  //   navigation.navigate('documentList', { unitNumber: searchInputValue });
+  // };
 
+  // const navigation = useNavigation<SearchUnitNavigationProp>();
+
+  // const dispatch = useAppDispatch();
 
   return (
-    <View style={styles.homeContainer}>
+    <View style={styles.loginContainer}>
       <TextInput
-        label="Serial no..."
-        value={searchInputValue}
-        onChangeText={text => setSearchInputValue(text)}
+        label="Email"
+        // value={searchInputValue}
+        // onChangeText={text => setSearchInputValue(text)}
         style={styles.searchInput}
-				onSubmitEditing={handleSearchButtonPress}
+				// onSubmitEditing={handleSearchButtonPress}
         returnKeyType="search"
 				
       />
       <Button
         mode="contained"
         style={styles.button}
-        onPress={handleSearchButtonPress}
+        // onPress={handleSearchButtonPress}
       >
-        Check your product*
+        Login
       </Button>
     </View>
   );
 };
 
-export default Home;
+export default Login;
 
 const styles = StyleSheet.create({
-  homeContainer: {
+  loginContainer: {
     paddingTop: 20,
     paddingLeft: 10,
     paddingRight: 10,
