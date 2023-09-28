@@ -12,16 +12,18 @@ type Props = DrawerScreenProps<RootStackParamList, 'searchUnit'>;
 type SearchUnitNavigationProp = Props['navigation'];
 
 const Home = () => {
-	const navigation = useNavigation<SearchUnitNavigationProp>();
-	
-	const dispatch = useAppDispatch();
+  const navigation = useNavigation<SearchUnitNavigationProp>();
+
+  const dispatch = useAppDispatch();
   const [searchInputValue, setSearchInputValue] = useState<string>('');
 
   const handleSearchButtonPress = () => {
-    dispatch(fetchInstructionsById(searchInputValue));
-    navigation.navigate('documentList', { unitNumber: searchInputValue });
+    dispatch(fetchInstructionsById(searchInputValue))
+      .then(() => {
+        navigation.navigate('documentList', { unitNumber: searchInputValue });
+      })
+      //NOTE: createAsyncThunk will allways return a resolved promise - no catch statement is needed https://redux-toolkit.js.org/api/createAsyncThunk#unwrapping-result-actions
   };
-
 
   return (
     <View style={styles.homeContainer}>
@@ -30,9 +32,8 @@ const Home = () => {
         value={searchInputValue}
         onChangeText={text => setSearchInputValue(text)}
         style={styles.searchInput}
-				onSubmitEditing={handleSearchButtonPress}
+        onSubmitEditing={handleSearchButtonPress}
         returnKeyType="search"
-				
       />
       <Button
         mode="contained"

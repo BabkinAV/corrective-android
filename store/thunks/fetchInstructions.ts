@@ -12,7 +12,7 @@ export const fetchInstructionsById = createAsyncThunk<
 		return rejectWithValue('Could not find unit')
 	}
   return axios
-    .get(process.env.EXPO_PUBLIC_API_URL + '/unit/' + unitNumber)
+    .get<affectedUnitResponse>(process.env.EXPO_PUBLIC_API_URL + '/unit/' + unitNumber)
     .then(response => response.data)
     .catch(error => {
       if (
@@ -23,5 +23,6 @@ export const fetchInstructionsById = createAsyncThunk<
       } else {
         return rejectWithValue('Failed to fetch unit');
       }
+
     });
 });

@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
-import { PaperProvider, Text, useTheme } from 'react-native-paper';
+import { IconButton, PaperProvider, Text, useTheme } from 'react-native-paper';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -38,6 +38,10 @@ export default function App() {
               },
               drawerActiveTintColor: '#fff',
               drawerInactiveTintColor: '#fff',
+              headerRight: props =>
+                store.getState().auth.isAuth ? (
+                  <IconButton icon="account" iconColor="#fff" size={32} />
+                ) : null,
             }}
           >
             <Drawer.Screen
@@ -50,16 +54,16 @@ export default function App() {
               component={DocumentList}
               initialParams={{ unitNumber: '' }}
               options={({ route }) => ({
-								title: route.params.unitNumber,
+                title: route.params.unitNumber,
                 headerTitleAlign: 'center',
                 drawerItemStyle: { height: 0 },
               })}
             />
-							<Drawer.Screen
-								name="login"
-								component={Login}
-								options={{ title: 'Login' }}
-							/>
+            <Drawer.Screen
+              name="login"
+              component={Login}
+              options={{ title: 'Login' }}
+            />
           </Drawer.Navigator>
         </NavigationContainer>
       </PaperProvider>

@@ -49,7 +49,7 @@ export const documentsSlice = createSlice({
     });
     builder.addCase(fetchInstructionsById.rejected, (state, action) => {
 			state.isFetchingDocuments = false;
-			state.errorFetchingDocuments = action.payload ?? 'Failed fetching documents'
+			state.errorFetchingDocuments = action.payload ?? 'Failed fetching documents';
 		});
   },
 });

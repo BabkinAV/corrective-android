@@ -3,44 +3,66 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
-import { useAppDispatch } from '../hooks/reduxHooks';
-import { fetchInstructionsById } from '../store/thunks/fetchInstructions';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import { postLogin } from '../store/thunks/postLogin';
 import { RootStackParamList } from '../types';
+import { selectIsAuthLoading } from '../store/reducers/authReducer';
 
-// type Props = DrawerScreenProps<RootStackParamList, 'searchUnit'>;
+type Props = DrawerScreenProps<RootStackParamList, 'login'>;
 
-// type SearchUnitNavigationProp = Props['navigation'];
+type SearchUnitNavigationProp = Props['navigation'];
 
 const Login = () => {
-  const [formData, setFormData] = useState<{email: string; password: string}>({email: '', password: ''});
+  const [formData, setFormData] = useState<{ email: string; password: string }>(
+    { email: '', password: '' }
+  );
 
-  // const handleSearchButtonPress = () => {
-  //   dispatch(fetchInstructionsById(searchInputValue));
-  //   navigation.navigate('documentList', { unitNumber: searchInputValue });
-  // };
+	const isAuthLoading = useAppSelector(selectIsAuthLoading);
 
-  // const navigation = useNavigation<SearchUnitNavigationProp>();
+  const handleChange = (text: string, name: 'email' | 'password') => {
+    setFormData(prevFormData => ({ ...prevFormData, [name]: text }));
+  };
 
-  // const dispatch = useAppDispatch();
+  const handleLoginButtonPress = () => {
+    dispatch(postLogin({ email: formData.email, password: formData.password }))
+      .unwrap()
+      .then(() => {
+        navigation.navigate('searchUnit');
+      })
+      .catch(err => console.log(err));
+  };
+
+  const navigation = useNavigation<SearchUnitNavigationProp>();
+
+  const dispatch = useAppDispatch();
 
   return (
     <View style={styles.loginContainer}>
       <TextInput
         label="Email"
-        // value={searchInputValue}
-        // onChangeText={text => setSearchInputValue(text)}
-        style={styles.searchInput}
-				// onSubmitEditing={handleSearchButtonPress}
-        returnKeyType="search"
-				
+        value={formData.email}
+        mode="outlined"
+        onChangeText={text => handleChange(text, 'email')}
+        style={styles.emailInput}
       />
-      <Button
-        mode="contained"
-        style={styles.button}
-        // onPress={handleSearchButtonPress}
-      >
-        Login
-      </Button>
+      <TextInput
+        label="Password"
+        mode="outlined"
+        value={formData.password}
+        onChangeText={text => handleChange(text, 'password')}
+        style={styles.passwordInput}
+      />
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={handleLoginButtonPress}
+					loading={isAuthLoading}
+					disabled={isAuthLoading}
+        >
+          Login
+        </Button>
+      </View>
     </View>
   );
 };
@@ -49,16 +71,28 @@ export default Login;
 
 const styles = StyleSheet.create({
   loginContainer: {
-    paddingTop: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingTop: 30,
+    paddingLeft: 50,
+    paddingRight: 50,
   },
   button: {
     marginTop: 15,
     paddingTop: 5,
     paddingBottom: 5,
+    maxWidth: 100,
   },
-  searchInput: {
-    backgroundColor: '#0000000f',
+  // searchInput: {
+  //   backgroundColor: '#0000000f',
+  // },
+  emailInput: {
+    backgroundColor: 'transparent',
+    marginBottom: 20,
+  },
+  passwordInput: {
+    backgroundColor: 'transparent',
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    alignItems: 'center',
   },
 });
