@@ -1,7 +1,8 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { Chip } from 'react-native-paper';
-import { instructionStatus } from '../types';
+import { instructionStatus } from '../../types/dataTypes';
+import { theme } from '../../theme';
 
 const StatusChip = ({
   status,
@@ -9,20 +10,20 @@ const StatusChip = ({
   status: instructionStatus;
 }) => {
   const chipColors = {
-		confirmed: '#008000',
-		open: '#3c64b1',
-		refused: '#FF0000'
+		confirmed: theme.colors.green100,
+		open: theme.colors.primary,
+		refused: theme.colors.red100
 	};
 
   const minusIcon = ({ size }: { size: number; color: string }) => {
     return <Image
-      source={require('../assets/minusCircleIcon.png')}
+      source={require('../../assets/minusCircleIcon.png')}
       style={{ width: size, height: size, tintColor: chipColors[status] }}
     />
 	};
   const checkIcon = ({ size }: { size: number; color: string }) => {
     return <Image
-      source={require('../assets/checkIcon.png')}
+      source={require('../../assets/checkIcon.png')}
       style={{ width: size, height: size, tintColor: chipColors[status] }}
     />
 	};

@@ -7,6 +7,8 @@ export const theme = {
     ...DefaultTheme.colors,
     primary: '#3c64b1',
 		onSurface: '#000',
-		grey100: '#737b7d'
+		grey100: '#737b7d',
+		green100: '#008000',
+		red100: '#FF0000'
   },
 };

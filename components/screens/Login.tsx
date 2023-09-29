@@ -1,12 +1,16 @@
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
+import { theme } from '../../theme';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { postLogin } from '../store/thunks/postLogin';
-import { RootStackParamList } from '../types';
-import { selectIsAuthLoading } from '../store/reducers/authReducer';
+import { Button, TextInput, Text } from 'react-native-paper';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { postLogin } from '../../store/thunks/postLogin';
+import { RootStackParamList } from '../../types/routerTypes';
+import {
+  selectAuthError,
+  selectIsAuthLoading,
+} from '../../store/reducers/authReducer';
 
 type Props = DrawerScreenProps<RootStackParamList, 'login'>;
 
@@ -17,7 +21,9 @@ const Login = () => {
     { email: '', password: '' }
   );
 
-	const isAuthLoading = useAppSelector(selectIsAuthLoading);
+  const isAuthLoading = useAppSelector(selectIsAuthLoading);
+
+  const authError = useAppSelector(selectAuthError);
 
   const handleChange = (text: string, name: 'email' | 'password') => {
     setFormData(prevFormData => ({ ...prevFormData, [name]: text }));
@@ -38,27 +44,33 @@ const Login = () => {
 
   return (
     <View style={styles.loginContainer}>
-      <TextInput
-        label="Email"
-        value={formData.email}
-        mode="outlined"
-        onChangeText={text => handleChange(text, 'email')}
-        style={styles.emailInput}
-      />
-      <TextInput
-        label="Password"
-        mode="outlined"
-        value={formData.password}
-        onChangeText={text => handleChange(text, 'password')}
-        style={styles.passwordInput}
-      />
+      <View style={styles.inputsContainer}>
+        <View>
+          <TextInput
+            label="Email"
+            value={formData.email}
+            mode="outlined"
+            onChangeText={text => handleChange(text, 'email')}
+            style={styles.emailInput}
+          />
+          <TextInput
+            label="Password"
+						secureTextEntry
+            mode="outlined"
+            value={formData.password}
+            onChangeText={text => handleChange(text, 'password')}
+            style={styles.passwordInput}
+          />
+        </View>
+        {authError && <Text style={styles.errorText}>{authError}</Text>}
+      </View>
       <View style={styles.buttonContainer}>
         <Button
           mode="contained"
           style={styles.button}
           onPress={handleLoginButtonPress}
-					loading={isAuthLoading}
-					disabled={isAuthLoading}
+          loading={isAuthLoading}
+          disabled={isAuthLoading}
         >
           Login
         </Button>
@@ -74,6 +86,13 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingLeft: 50,
     paddingRight: 50,
+  },
+  inputsContainer: {
+    minHeight: 200,
+    // justifyContent: 'space-between'
+  },
+  errorText: {
+    color: theme.colors.red100,
   },
   button: {
     marginTop: 15,

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
-import { affectedUnitResponse } from '../../types';
+import { affectedUnitResponse } from '../../types/apiResponseTypes';
 
 export const fetchInstructionsById = createAsyncThunk<
   affectedUnitResponse,

@@ -2,14 +2,15 @@ import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { ActivityIndicator, Divider } from 'react-native-paper';
-import InstructionItem from '../components/InstructionItem';
-import { instructionArray } from '../data';
-import { useAppSelector } from '../hooks/reduxHooks';
+import InstructionItem from '../UI/InstructionItem';
+import { instructionArray } from '../../data';
+import { useAppSelector } from '../../hooks/reduxHooks';
 import {
   selectDocuments,
   selectErrorFetching,
   selectIsDataLoading,
-} from '../store/reducers/documentsReducer';
+} from '../../store/reducers/documentsReducer';
+import { theme } from '../../theme';
 
 const DocumentList = () => {
   const documents = useAppSelector(selectDocuments);
@@ -22,7 +23,7 @@ const DocumentList = () => {
         <Text
           style={[
             styles.textInfo,
-            errorFetchingDocuments !== 'Could not find unit.' && { color: 'red' },
+            errorFetchingDocuments !== 'Could not find unit.' && { color: theme.colors.red100 },
           ]}
         >
           {errorFetchingDocuments}

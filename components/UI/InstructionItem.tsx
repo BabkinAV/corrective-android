@@ -2,10 +2,10 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import StatusChip from '../components/StatusChip';
-import { theme } from '../theme';
+import StatusChip from './StatusChip';
+import { theme } from '../../theme';
 import * as Linking from 'expo-linking';
-import { instructionStatus } from '../types';
+import { instructionStatus } from '../../types/dataTypes';
 
 const InstructionItem = ({
   instructionNumber,

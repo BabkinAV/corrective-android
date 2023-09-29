@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { instructionWithStatus } from '../../types';
+import { instructionWithStatus } from '../../types/dataTypes';
 import type { RootState } from '../store';
 import { fetchInstructionsById } from '../thunks/fetchInstructions';
 

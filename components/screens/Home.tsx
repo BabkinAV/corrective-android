@@ -3,9 +3,9 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
-import { useAppDispatch } from '../hooks/reduxHooks';
-import { fetchInstructionsById } from '../store/thunks/fetchInstructions';
-import { RootStackParamList } from '../types';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { fetchInstructionsById } from '../../store/thunks/fetchInstructions';
+import { RootStackParamList } from '../../types/routerTypes';
 
 type Props = DrawerScreenProps<RootStackParamList, 'searchUnit'>;
 
@@ -18,11 +18,8 @@ const Home = () => {
   const [searchInputValue, setSearchInputValue] = useState<string>('');
 
   const handleSearchButtonPress = () => {
-    dispatch(fetchInstructionsById(searchInputValue))
-      .then(() => {
-        navigation.navigate('documentList', { unitNumber: searchInputValue });
-      })
-      //NOTE: createAsyncThunk will allways return a resolved promise - no catch statement is needed https://redux-toolkit.js.org/api/createAsyncThunk#unwrapping-result-actions
+    dispatch(fetchInstructionsById(searchInputValue));
+		navigation.navigate('documentList', { unitNumber: searchInputValue });
   };
 
   return (
