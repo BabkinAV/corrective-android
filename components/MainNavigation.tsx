@@ -3,8 +3,8 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { resetAuth, selectIsAuth } from '../store/reducers/authReducer';
+import { useAppSelector } from '../hooks/reduxHooks';
+import { selectIsAuth } from '../store/reducers/authReducer';
 import { theme } from '../theme';
 import { RootStackParamList } from '../types/routerTypes';
 import DocumentList from './screens/DocumentList';
@@ -13,9 +13,12 @@ import Login from './screens/Login';
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
-const MainNavigation = () => {
+const MainNavigation = ({
+  onLogoutButtonPress,
+}: {
+  onLogoutButtonPress: () => void;
+}) => {
   const isAuth = useAppSelector(selectIsAuth);
-  const dispatch = useAppDispatch();
 
   return (
     <NavigationContainer>
@@ -37,7 +40,7 @@ const MainNavigation = () => {
                 icon="account"
                 iconColor="#fff"
                 size={32}
-                onPress={() => dispatch(resetAuth())}
+                onPress={onLogoutButtonPress}
               />
             ) : null,
         }}
@@ -60,7 +63,10 @@ const MainNavigation = () => {
         <Drawer.Screen
           name="login"
           component={Login}
-          options={{ title: 'Login' }}
+          options={{
+            title: 'Login',
+            drawerItemStyle: { height: isAuth ? 0 : 'auto' },
+          }}
         />
       </Drawer.Navigator>
     </NavigationContainer>
@@ -68,4 +74,3 @@ const MainNavigation = () => {
 };
 
 export default MainNavigation;
-

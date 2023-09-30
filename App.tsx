@@ -1,23 +1,35 @@
 import 'react-native-gesture-handler';
+import { useState } from 'react';
+
 import { PaperProvider, useTheme } from 'react-native-paper';
 
 import { StatusBar } from 'expo-status-bar';
 import { Provider } from 'react-redux';
 
+import LogoutModal from './components/LogoutModal';
+import MainNavigation from './components/MainNavigation';
 import { store } from './store/store';
 import { theme } from './theme';
-import MainNavigation from './components/MainNavigation';
 
 export type AppTheme = typeof theme;
 
 export const useAppTheme = () => useTheme<AppTheme>();
 
 export default function App() {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const hideModal = () => setIsModalVisible(false);
+
+  const handleLogoutButtonPress = () => {
+    setIsModalVisible(true);
+  };
+
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <StatusBar style="light" />
-        <MainNavigation />
+        <LogoutModal isModalVisible={isModalVisible} hideModal={hideModal} />
+        <MainNavigation onLogoutButtonPress={handleLogoutButtonPress} />
       </PaperProvider>
     </Provider>
   );

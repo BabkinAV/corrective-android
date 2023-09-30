@@ -2,7 +2,7 @@ import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, Modal, Portal, Text, TextInput } from 'react-native-paper';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { fetchInstructionsById } from '../../store/thunks/fetchInstructions';
 import { RootStackParamList } from '../../types/routerTypes';
@@ -19,7 +19,7 @@ const Home = () => {
 
   const handleSearchButtonPress = () => {
     dispatch(fetchInstructionsById(searchInputValue));
-		navigation.navigate('documentList', { unitNumber: searchInputValue });
+    navigation.navigate('documentList', { unitNumber: searchInputValue });
   };
 
   return (

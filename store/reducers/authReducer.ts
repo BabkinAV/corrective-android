@@ -22,7 +22,6 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     resetAuth: state => {
-      console.log('fired reset state!');
       state.isAuth = false;
       state.token = '';
     },
@@ -35,13 +34,11 @@ export const authSlice = createSlice({
       state.token = '';
     });
     builder.addCase(postLogin.fulfilled, (state, action) => {
-      console.log('Auth fulfilled case fired!');
       state.isAuthLoading = false;
       state.isAuth = true;
       state.token = action.payload.token;
     });
     builder.addCase(postLogin.rejected, (state, action) => {
-      console.log('Auth rejected case fired!');
       state.isAuthLoading = false;
       state.authError = action.payload ?? 'Failed to authenticate';
     });
