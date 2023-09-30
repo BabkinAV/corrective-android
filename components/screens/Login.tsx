@@ -1,20 +1,15 @@
-import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { theme } from '../../theme';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput, Text } from 'react-native-paper';
+import { Button, Text, TextInput } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { postLogin } from '../../store/thunks/postLogin';
-import { RootStackParamList } from '../../types/routerTypes';
 import {
   selectAuthError,
   selectIsAuthLoading,
 } from '../../store/reducers/authReducer';
-
-type Props = DrawerScreenProps<RootStackParamList, 'login'>;
-
-type SearchUnitNavigationProp = Props['navigation'];
+import { postLogin } from '../../store/thunks/postLogin';
+import { theme } from '../../theme';
+import { LoginNavigationProp } from '../../types/routerTypes';
 
 const Login = () => {
   const [formData, setFormData] = useState<{ email: string; password: string }>(
@@ -38,7 +33,7 @@ const Login = () => {
       .catch(err => console.log(err));
   };
 
-  const navigation = useNavigation<SearchUnitNavigationProp>();
+  const navigation = useNavigation<LoginNavigationProp>();
 
   const dispatch = useAppDispatch();
 
@@ -55,7 +50,7 @@ const Login = () => {
           />
           <TextInput
             label="Password"
-						secureTextEntry
+            secureTextEntry
             mode="outlined"
             value={formData.password}
             onChangeText={text => handleChange(text, 'password')}

@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { instructionWithStatus } from '../../types/dataTypes';
 import type { RootState } from '../store';
 import { postLogin } from '../thunks/postLogin';
 
