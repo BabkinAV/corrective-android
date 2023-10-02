@@ -4,12 +4,13 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import {
-  selectAuthError,
-  selectIsAuthLoading,
+	selectAuthError,
+	selectIsAuthLoading
 } from '../../store/reducers/authReducer';
 import { postLogin } from '../../store/thunks/postLogin';
 import { theme } from '../../theme';
 import { LoginNavigationProp } from '../../types/routerTypes';
+
 
 const Login = () => {
   const [formData, setFormData] = useState<{ email: string; password: string }>(

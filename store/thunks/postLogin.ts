@@ -1,20 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { loginResponse } from '../../types/apiResponseTypes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const postLogin = createAsyncThunk<
   loginResponse,
   { email: string; password: string },
   { rejectValue: string }
 >('auth/login', ({ email, password }, { rejectWithValue }) => {
+	let responseData: loginResponse;
   return axios
     .post<loginResponse>(
       'https://wide-eyed-attire-mite.cyclic.app/auth/login',
       { email, password }
     )
     .then(response => {
-      return response.data;
+			responseData = response.data;
+			return AsyncStorage.setItem('token', response.data.token);
     })
+		.then(() => {
+			return responseData
+		})
     .catch(error => {
       if (
         axios.isAxiosError<{ message?: string }>(error) &&

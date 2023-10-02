@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { postLogin } from '../thunks/postLogin';
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface AuthState {
   isAuth: boolean;
@@ -24,6 +25,10 @@ export const authSlice = createSlice({
       state.isAuth = false;
       state.token = '';
     },
+		setAuth: (state, action: PayloadAction<string>) => {
+			state.isAuth = true;
+			state.token = action.payload;
+		}
   },
   extraReducers: builder => {
     builder.addCase(postLogin.pending, (state, action) => {
@@ -49,8 +54,10 @@ export const selectIsAuthLoading = (state: RootState) =>
 
 export const selectAuthError = (state: RootState) => state.auth.authError;
 export const selectIsAuth = (state: RootState) => state.auth.isAuth;
+export const selectToken = (state: RootState) => state.auth.token;
 
 
-export const { resetAuth } = authSlice.actions;
+
+export const { resetAuth, setAuth } = authSlice.actions;
 
 export default authSlice.reducer;

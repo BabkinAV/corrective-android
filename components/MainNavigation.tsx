@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
-import { useAppSelector } from '../hooks/reduxHooks';
-import { selectIsAuth } from '../store/reducers/authReducer';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import { selectIsAuth, setAuth } from '../store/reducers/authReducer';
 import { theme } from '../theme';
 import { RootStackParamList } from '../types/routerTypes';
 import DocumentList from './screens/DocumentList';
 import Home from './screens/Home';
 import Login from './screens/Login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -19,6 +20,20 @@ const MainNavigation = ({
   onLogoutButtonPress: () => void;
 }) => {
   const isAuth = useAppSelector(selectIsAuth);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    AsyncStorage.getItem('token')
+      .then(tokenValue => {
+        if (tokenValue) {
+          dispatch(setAuth(tokenValue));
+        }
+      })
+      .catch(e => {
+        console.log('Error fetching token from async storage: ', e);
+      });
+  }, []);
 
   return (
     <NavigationContainer>

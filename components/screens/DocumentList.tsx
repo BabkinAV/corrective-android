@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { ActivityIndicator, Divider } from 'react-native-paper';
@@ -18,12 +18,14 @@ const DocumentList = () => {
   const isDataLoading = useAppSelector(selectIsDataLoading);
   return (
     <View style={styles.listContainer}>
-      {isDataLoading && <ActivityIndicator style={{paddingTop: 20}}/>}
+      {isDataLoading && <ActivityIndicator style={{ paddingTop: 20 }} />}
       {errorFetchingDocuments && (
         <Text
           style={[
             styles.textInfo,
-            errorFetchingDocuments !== 'Could not find unit.' && { color: theme.colors.red100 },
+            errorFetchingDocuments !== 'Could not find unit.' && {
+              color: theme.colors.red100,
+            },
           ]}
         >
           {errorFetchingDocuments}
