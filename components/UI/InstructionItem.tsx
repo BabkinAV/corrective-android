@@ -1,11 +1,13 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Button, Checkbox, Text } from 'react-native-paper';
 import StatusChip from './StatusChip';
 import { theme } from '../../theme';
 import * as Linking from 'expo-linking';
 import { instructionStatus } from '../../types/dataTypes';
+import { addDocumentToSelected, removeDocumentFromSelected, selectSelectedDocumentIds } from '../../store/reducers/documentsReducer';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 const InstructionItem = ({
   instructionNumber,
@@ -14,7 +16,8 @@ const InstructionItem = ({
   subsystem,
   date,
   downloadLink,
-	status
+  status,
+	docId
 }: {
   instructionNumber: string;
   instructionTitle: string;
@@ -22,11 +25,31 @@ const InstructionItem = ({
   subsystem: string;
   date: string;
   downloadLink: string;
-	status: instructionStatus
+  status: instructionStatus;
+	docId: string
 }) => {
+
+	
+	const dispatch = useAppDispatch()
+	
+	const selectedUnits = useAppSelector(selectSelectedDocumentIds);
+
+	const isUnitSelected = selectedUnits.indexOf(docId) !== -1;
+
+	const handleCheckboxPress = () => {
+		if (isUnitSelected) {
+			dispatch(removeDocumentFromSelected(docId))
+		} else {
+			dispatch(addDocumentToSelected(docId))
+		}
+	}
+
   return (
     <View style={styles.instructionContainer}>
       <View style={styles.instructionNumberContainer}>
+        <View style={styles.checkboxContainer}>
+          <Checkbox status={isUnitSelected ? 'checked' : 'unchecked'} onPress={handleCheckboxPress}/>
+        </View>
         <Text variant="bodyLarge" style={styles.instructionNumber}>
           {instructionNumber}
         </Text>
@@ -78,7 +101,9 @@ const InstructionItem = ({
           style={styles.downloadButton}
           uppercase
           onPress={() =>
-            Linking.openURL(process.env.EXPO_PUBLIC_API_URL + '/static/' + downloadLink)
+            Linking.openURL(
+              process.env.EXPO_PUBLIC_API_URL + '/static/' + downloadLink
+            )
           }
         >
           Download
@@ -93,7 +118,7 @@ export default InstructionItem;
 const styles = StyleSheet.create({
   instructionContainer: {},
   instructionNumberContainer: {
-		paddingTop: 15, 
+    paddingTop: 15,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -112,6 +137,11 @@ const styles = StyleSheet.create({
   },
   instructionTitle: {
     color: theme.colors.grey100,
+  },
+  checkboxContainer: {
+    position: 'absolute',
+    left: 0,
+    top: 10,
   },
   instructionBodyContainer: {
     paddingTop: 30,

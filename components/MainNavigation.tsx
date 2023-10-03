@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { selectIsAuth, setAuth } from '../store/reducers/authReducer';
+import { resetSelected, selectSelectedDocumentIdsLength } from '../store/reducers/documentsReducer';
 import { theme } from '../theme';
 import { RootStackParamList } from '../types/routerTypes';
 import DocumentList from './screens/DocumentList';
 import Home from './screens/Home';
 import Login from './screens/Login';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -20,6 +21,10 @@ const MainNavigation = ({
   onLogoutButtonPress: () => void;
 }) => {
   const isAuth = useAppSelector(selectIsAuth);
+
+  const selectedDocumentIdsLength = useAppSelector(
+    selectSelectedDocumentIdsLength
+  );
 
   const dispatch = useAppDispatch();
 
@@ -70,7 +75,22 @@ const MainNavigation = ({
           component={DocumentList}
           initialParams={{ unitNumber: '' }}
           options={({ route }) => ({
-            title: route.params.unitNumber,
+            title:
+              selectedDocumentIdsLength > 0
+                ? selectedDocumentIdsLength.toString() +
+                  ` document${
+                    selectedDocumentIdsLength > 1 ? 's' : ''
+                  } selected`
+                : route.params.unitNumber,
+            headerRight: () =>
+              selectedDocumentIdsLength ? (
+                <IconButton
+                  icon="close"
+                  iconColor="#fff"
+                  size={20}
+                  onPress={()=>dispatch(resetSelected())}
+                />
+              ) : null,
             headerTitleAlign: 'center',
             drawerItemStyle: { height: 0 },
           })}

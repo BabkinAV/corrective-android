@@ -7,7 +7,6 @@ export const fetchInstructionsById = createAsyncThunk<
   string,
   { rejectValue: string }
 >('users/fetchByIdStatus', (unitNumber: string, { rejectWithValue }) => {
-  console.log('Fired fetcher function!');
 	if (unitNumber === '') {
 		return rejectWithValue('Could not find unit')
 	}

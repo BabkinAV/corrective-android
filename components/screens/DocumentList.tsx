@@ -9,13 +9,18 @@ import {
   selectDocuments,
   selectErrorFetching,
   selectIsDataLoading,
+	selectSelectedDocumentIdsLength
 } from '../../store/reducers/documentsReducer';
 import { theme } from '../../theme';
+import EditStatusFAB from '../UI/EditStatusFAB';
+
+// NOTE: Update status of items for the unit: https://github.com/BabkinAV/Corrective/blob/master/src/redux/actions/dataActions.js#L68-L78
 
 const DocumentList = () => {
   const documents = useAppSelector(selectDocuments);
   const errorFetchingDocuments = useAppSelector(selectErrorFetching);
   const isDataLoading = useAppSelector(selectIsDataLoading);
+	const selectedDocumentsIdsLength = useAppSelector(selectSelectedDocumentIdsLength)
   return (
     <View style={styles.listContainer}>
       {isDataLoading && <ActivityIndicator style={{ paddingTop: 20 }} />}
@@ -34,26 +39,30 @@ const DocumentList = () => {
       {!isDataLoading &&
         !errorFetchingDocuments &&
         (documents.length > 0 ? (
-          <FlatList
-            data={documents}
-            renderItem={({ item, index }) => (
-              <>
-                <InstructionItem
-                  instructionNumber={item.instruction.instNumber}
-                  instructionTitle={item.instruction.title}
-                  documentType={item.instruction.instType}
-                  subsystem={item.instruction.subsystem}
-                  date={item.instruction.releaseDate}
-                  downloadLink={item.instruction.link}
-                  status={item.status}
-                />
-                {index !== instructionArray.length - 1 && (
-                  <Divider style={{ marginTop: 10 }} bold />
-                )}
-              </>
-            )}
-            keyExtractor={item => item._id}
-          />
+          <>
+            <FlatList
+              data={documents}
+              renderItem={({ item, index }) => (
+                <>
+                  <InstructionItem
+                    instructionNumber={item.instruction.instNumber}
+                    instructionTitle={item.instruction.title}
+                    documentType={item.instruction.instType}
+                    subsystem={item.instruction.subsystem}
+                    date={item.instruction.releaseDate}
+                    downloadLink={item.instruction.link}
+                    status={item.status}
+                    docId={item._id}
+                  />
+                  {index !== instructionArray.length - 1 && (
+                    <Divider style={{ marginTop: 10 }} bold />
+                  )}
+                </>
+              )}
+              keyExtractor={item => item._id}
+            />
+						{selectedDocumentsIdsLength > 0 && <EditStatusFAB />}
+          </>
         ) : (
           <Text style={styles.textInfo}>No unit has been found!</Text>
         ))}
