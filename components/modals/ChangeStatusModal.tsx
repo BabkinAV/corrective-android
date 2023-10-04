@@ -1,39 +1,30 @@
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Modal, Portal, Text } from 'react-native-paper';
-import { useAppDispatch } from '../hooks/reduxHooks';
-import { resetAuth } from '../store/reducers/authReducer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LogoutModal = ({
-  isModalVisible,
+import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
+import { instructionStatus } from '../../types/dataTypes';
+
+const ChangeStatusModal = ({
+  isUpdatingStatus,
+  handleYesButtonClick,
   hideModal,
+  documentSelectedNumber,
 }: {
-  isModalVisible: boolean;
-  hideModal: () => void;
+  isUpdatingStatus: instructionStatus | '';
+  handleYesButtonClick?: () => void;
+  hideModal?: () => void;
+  documentSelectedNumber: number;
 }) => {
-  const dispatch = useAppDispatch();
-
-  const handleYesButtonClick = () => {
-    AsyncStorage.removeItem('token')
-      .then(() => {
-        dispatch(resetAuth());
-        hideModal();
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
   return (
     <Portal>
       <Modal
-        visible={isModalVisible}
+        visible={Boolean(isUpdatingStatus)}
         onDismiss={hideModal}
         contentContainerStyle={styles.modalContainer}
       >
         <Text style={styles.confirmationText}>
-          Are you sure you want to logout?
+          Are you sure you want to change status of {documentSelectedNumber}{' '}
+          document{documentSelectedNumber > 1 && 's'} to '{isUpdatingStatus}'?
         </Text>
         <View style={styles.buttonContainer}>
           <Button mode="contained" onPress={handleYesButtonClick}>
@@ -48,7 +39,7 @@ const LogoutModal = ({
   );
 };
 
-export default LogoutModal;
+export default ChangeStatusModal;
 
 const styles = StyleSheet.create({
   modalContainer: {

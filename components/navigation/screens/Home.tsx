@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
-import { useAppDispatch } from '../../hooks/reduxHooks';
-import { fetchInstructionsById } from '../../store/thunks/fetchInstructions';
-import { SearchUnitNavigationProp } from '../../types/routerTypes';
+import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { fetchInstructionsById } from '../../../store/thunks/fetchInstructions';
+import { SearchUnitNavigationProp } from '../../../types/routerTypes';
 
 
 const Home = () => {

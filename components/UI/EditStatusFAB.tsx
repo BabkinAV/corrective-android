@@ -7,17 +7,15 @@ import { useAppDispatch } from '../../hooks/reduxHooks';
 import { instructionStatus } from '../../types/dataTypes';
 import { resetSelected } from '../../store/reducers/documentsReducer';
 
-const EditStatusFAB = () => {
+const EditStatusFAB = ({
+  handleActionItemPress,
+}: {
+  handleActionItemPress: (status: instructionStatus) => void;
+}) => {
   const [state, setState] = React.useState({ open: false });
 
-	const dispatch = useAppDispatch();
 
   const onStateChange = ({ open }: { open: boolean }) => setState({ open });
-
-	const handleActionItemPress = (status: instructionStatus) => {
-		console.log('Items status changed to ', status)
-		dispatch(resetSelected())
-	}
 
   const { open } = state;
 
@@ -33,31 +31,26 @@ const EditStatusFAB = () => {
           {
             icon: 'check',
             label: 'Set selected as completed',
-						color: theme.colors.green100,
-						style:styles.actionItem,
+            color: theme.colors.green100,
+            style: styles.actionItem,
             onPress: () => handleActionItemPress('confirmed'),
           },
           {
             icon: 'information',
             label: 'Set selected as opened',
-						color: theme.colors.primary,						
-						style:styles.actionItem,
+            color: theme.colors.primary,
+            style: styles.actionItem,
             onPress: () => handleActionItemPress('open'),
           },
           {
             icon: 'minus-circle',
             label: 'Set selected as refused',
-						color: theme.colors.red100,
-						style:styles.actionItem,
+            color: theme.colors.red100,
+            style: styles.actionItem,
             onPress: () => handleActionItemPress('refused'),
           },
         ]}
         onStateChange={onStateChange}
-        onPress={() => {
-          if (open) {
-            // do something if the speed dial is open
-          }
-        }}
       />
     </Portal>
   );
@@ -70,15 +63,15 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: theme.colors.primary,
   },
-	actionItem: {
-		borderRadius: 50,
-	},
-	// actionItemRefused: {
-	// 	borderRadius: 50,
-	// 	color: theme.colors.red100
-	// },
-	// actionItemOpened: {
-	// 	borderRadius: 50,
-	// 	color: theme.colors.primary
-	// },
+  actionItem: {
+    borderRadius: 50,
+  },
+  // actionItemRefused: {
+  // 	borderRadius: 50,
+  // 	color: theme.colors.red100
+  // },
+  // actionItemOpened: {
+  // 	borderRadius: 50,
+  // 	color: theme.colors.primary
+  // },
 });

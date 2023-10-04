@@ -10,6 +10,7 @@ import { addDocumentToSelected, removeDocumentFromSelected, selectSelectedDocume
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 const InstructionItem = ({
+	editable,
   instructionNumber,
   instructionTitle,
   documentType,
@@ -19,6 +20,7 @@ const InstructionItem = ({
   status,
 	docId
 }: {
+	editable: boolean;
   instructionNumber: string;
   instructionTitle: string;
   documentType: string;
@@ -48,7 +50,7 @@ const InstructionItem = ({
     <View style={styles.instructionContainer}>
       <View style={styles.instructionNumberContainer}>
         <View style={styles.checkboxContainer}>
-          <Checkbox status={isUnitSelected ? 'checked' : 'unchecked'} onPress={handleCheckboxPress}/>
+          {editable && <Checkbox status={isUnitSelected ? 'checked' : 'unchecked'} onPress={handleCheckboxPress}/>}
         </View>
         <Text variant="bodyLarge" style={styles.instructionNumber}>
           {instructionNumber}

@@ -1,19 +1,27 @@
 import React, { useEffect } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import {
+	createDrawerNavigator
+} from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { selectIsAuth, setAuth } from '../store/reducers/authReducer';
-import { resetSelected, selectSelectedDocumentIdsLength } from '../store/reducers/documentsReducer';
-import { theme } from '../theme';
-import { RootStackParamList } from '../types/routerTypes';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { selectIsAuth, setAuth } from '../../store/reducers/authReducer';
+import {
+	resetSelected,
+	selectSelectedDocumentIdsLength,
+} from '../../store/reducers/documentsReducer';
+import { theme } from '../../theme';
+import { RootStackParamList } from '../../types/routerTypes';
+import CustomDrawerContent from './CustomDrawerContent';
 import DocumentList from './screens/DocumentList';
 import Home from './screens/Home';
 import Login from './screens/Login';
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
+
+
 
 const MainNavigation = ({
   onLogoutButtonPress,
@@ -43,6 +51,9 @@ const MainNavigation = ({
   return (
     <NavigationContainer>
       <Drawer.Navigator
+        drawerContent={props => (
+          <CustomDrawerContent {...props} onLogoutPress={onLogoutButtonPress} />
+        )}
         screenOptions={{
           headerStyle: {
             backgroundColor: theme.colors.primary,
@@ -88,7 +99,7 @@ const MainNavigation = ({
                   icon="close"
                   iconColor="#fff"
                   size={20}
-                  onPress={()=>dispatch(resetSelected())}
+                  onPress={() => dispatch(resetSelected())}
                 />
               ) : null,
             headerTitleAlign: 'center',

@@ -6,8 +6,8 @@ import { PaperProvider, useTheme } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import { Provider } from 'react-redux';
 
-import LogoutModal from './components/LogoutModal';
-import MainNavigation from './components/MainNavigation';
+import LogoutModal from './components/modals/LogoutModal';
+import MainNavigation from './components/navigation/MainNavigation';
 import { store } from './store/store';
 import { theme } from './theme';
 
