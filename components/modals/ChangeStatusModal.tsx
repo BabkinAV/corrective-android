@@ -3,6 +3,8 @@ import { StyleSheet, View } from 'react-native';
 
 import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
 import { instructionStatus } from '../../types/dataTypes';
+import { useAppSelector } from '../../hooks/reduxHooks';
+import { selectIsDataLoading } from '../../store/reducers/documentsReducer';
 
 const ChangeStatusModal = ({
   isUpdatingStatus,
@@ -11,10 +13,11 @@ const ChangeStatusModal = ({
   documentSelectedNumber,
 }: {
   isUpdatingStatus: instructionStatus | '';
-  handleYesButtonClick?: () => void;
+  handleYesButtonClick: (newStatus: instructionStatus) => void;
   hideModal?: () => void;
   documentSelectedNumber: number;
 }) => {
+  const isDataSubmitting = useAppSelector(selectIsDataLoading);
   return (
     <Portal>
       <Modal
@@ -27,10 +30,22 @@ const ChangeStatusModal = ({
           document{documentSelectedNumber > 1 && 's'} to '{isUpdatingStatus}'?
         </Text>
         <View style={styles.buttonContainer}>
-          <Button mode="contained" onPress={handleYesButtonClick}>
+          <Button
+            mode="contained"
+            disabled={isDataSubmitting}
+            onPress={
+              isUpdatingStatus
+                ? () => handleYesButtonClick(isUpdatingStatus)
+                : () => null
+            }
+          >
             Yes
           </Button>
-          <Button mode="outlined" onPress={hideModal}>
+          <Button
+            mode="outlined"
+            disabled={isDataSubmitting}
+            onPress={hideModal}
+          >
             No
           </Button>
         </View>

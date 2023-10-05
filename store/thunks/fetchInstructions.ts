@@ -6,7 +6,7 @@ export const fetchInstructionsById = createAsyncThunk<
   affectedUnitResponse,
   string,
   { rejectValue: string }
->('users/fetchByIdStatus', (unitNumber: string, { rejectWithValue }) => {
+>('documents/fetchByIdStatus', (unitNumber: string, { rejectWithValue }) => {
 	if (unitNumber === '') {
 		return rejectWithValue('Could not find unit')
 	}

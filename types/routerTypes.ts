@@ -18,4 +18,11 @@ export type LoginNavigationProp = DrawerScreenProps<
   'login'
 >['navigation'];
 
+export type DocumentListProp = DrawerScreenProps<
+  RootStackParamList,
+  'documentList'
+>;
+
+
+
 

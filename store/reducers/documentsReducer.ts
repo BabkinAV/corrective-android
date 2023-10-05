@@ -2,12 +2,13 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { instructionWithStatus } from '../../types/dataTypes';
 import type { RootState } from '../store';
 import { fetchInstructionsById } from '../thunks/fetchInstructions';
+import { updateStatus } from '../thunks/updateStatus';
 
 // Define a type for the slice state
 export interface documentState {
   documentsArray: instructionWithStatus[];
   errorFetchingDocuments: string;
-  isFetchingDocuments: boolean;
+  isDataLoading: boolean;
   selectedDocumentIds: string[];
 }
 
@@ -15,7 +16,7 @@ export interface documentState {
 const initialState: documentState = {
   documentsArray: [],
   errorFetchingDocuments: '',
-  isFetchingDocuments: false,
+  isDataLoading: false,
   selectedDocumentIds: [],
 };
 
@@ -50,10 +51,10 @@ export const documentsSlice = createSlice({
     builder.addCase(fetchInstructionsById.pending, (state, action) => {
       state.documentsArray = [];
       state.errorFetchingDocuments = '';
-      state.isFetchingDocuments = true;
+      state.isDataLoading = true;
     });
     builder.addCase(fetchInstructionsById.fulfilled, (state, action) => {
-      state.isFetchingDocuments = false;
+      state.isDataLoading = false;
       if (action.payload.unit) {
         state.documentsArray = action.payload.unit.instructions;
       } else {
@@ -61,10 +62,21 @@ export const documentsSlice = createSlice({
       }
     });
     builder.addCase(fetchInstructionsById.rejected, (state, action) => {
-      state.isFetchingDocuments = false;
+      state.isDataLoading = false;
       state.errorFetchingDocuments =
         action.payload ?? 'Failed fetching documents';
     });
+		builder.addCase(updateStatus.pending, (state, action) => {
+			state.isDataLoading = true;
+		})
+		builder.addCase(updateStatus.fulfilled, (state, action) => {
+			console.log('Update succesfull! New statuses: ', action.payload);
+			state.selectedDocumentIds = [];
+			state.isDataLoading = false;
+		})
+		builder.addCase(updateStatus.rejected, (state, action) => {
+			state.isDataLoading = false;
+		})
   },
 });
 
@@ -76,7 +88,7 @@ export const selectDocuments = (state: RootState) =>
 export const selectErrorFetching = (state: RootState) =>
   state.documents.errorFetchingDocuments;
 export const selectIsDataLoading = (state: RootState) =>
-  state.documents.isFetchingDocuments;
+  state.documents.isDataLoading;
 export const selectSelectedDocumentIds = (state: RootState) =>
   state.documents.selectedDocumentIds;
 

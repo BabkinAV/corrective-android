@@ -6,7 +6,7 @@ import InstructionItem from '../../UI/InstructionItem';
 import { instructionArray } from '../../../data';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import {
-	resetSelected,
+  resetSelected,
   selectDocuments,
   selectErrorFetching,
   selectIsDataLoading,
@@ -17,25 +17,44 @@ import EditStatusFAB from '../../UI/EditStatusFAB';
 import { instructionStatus } from '../../../types/dataTypes';
 import ChangeStatusModal from '../../modals/ChangeStatusModal';
 import { selectIsAuth } from '../../../store/reducers/authReducer';
+import { updateStatus } from '../../../store/thunks/updateStatus';
+import { DocumentListProp } from '../../../types/routerTypes';
+import { fetchInstructionsById } from '../../../store/thunks/fetchInstructions';
 
-// NOTE: Update status of items for the unit: https://github.com/BabkinAV/Corrective/blob/master/src/redux/actions/dataActions.js#L68-L78
-
-const DocumentList = () => {
+const DocumentList = ({ route, navigation }: DocumentListProp) => {
   const documents = useAppSelector(selectDocuments);
   const errorFetchingDocuments = useAppSelector(selectErrorFetching);
   const isDataLoading = useAppSelector(selectIsDataLoading);
-	const isAuth = useAppSelector(selectIsAuth);
+  const isAuth = useAppSelector(selectIsAuth);
   const selectedDocumentsIdsLength = useAppSelector(
     selectSelectedDocumentIdsLength
   );
-	const dispatch = useAppDispatch()
+
+  const dispatch = useAppDispatch();
+
   const [isUpdatingStatus, setIsUpdatingStatus] = useState<
     instructionStatus | ''
   >('');
 
-	const handleActionItemPress = (status: instructionStatus) => {
-		setIsUpdatingStatus(status);
-	}
+  const handleActionItemPress = (status: instructionStatus) => {
+    setIsUpdatingStatus(status);
+  };
+
+  const handleYesButtonClick = (status: instructionStatus) => {
+    dispatch(
+      updateStatus({ unitNumber: route.params.unitNumber, newStatus: status })
+    )
+      .unwrap()
+      .then(() => {
+        dispatch(fetchInstructionsById(route.params.unitNumber));
+      })
+      .catch(err => {
+        console.log('Error (in component) submitting!', err);
+      })
+      .finally(() => {
+        setIsUpdatingStatus('');
+      });
+  };
 
   return (
     <View style={styles.listContainer}>
@@ -61,7 +80,7 @@ const DocumentList = () => {
               renderItem={({ item, index }) => (
                 <>
                   <InstructionItem
-										editable={isAuth}
+                    editable={isAuth}
                     instructionNumber={item.instruction.instNumber}
                     instructionTitle={item.instruction.title}
                     documentType={item.instruction.instType}
@@ -81,9 +100,12 @@ const DocumentList = () => {
             <ChangeStatusModal
               isUpdatingStatus={isUpdatingStatus}
               hideModal={() => setIsUpdatingStatus('')}
-							documentSelectedNumber={selectedDocumentsIdsLength}
+              documentSelectedNumber={selectedDocumentsIdsLength}
+              handleYesButtonClick={handleYesButtonClick}
             />
-            {selectedDocumentsIdsLength > 0 && <EditStatusFAB handleActionItemPress={handleActionItemPress}/>}
+            {selectedDocumentsIdsLength > 0 && (
+              <EditStatusFAB handleActionItemPress={handleActionItemPress} />
+            )}
           </>
         ) : (
           <Text style={styles.textInfo}>No unit has been found!</Text>
