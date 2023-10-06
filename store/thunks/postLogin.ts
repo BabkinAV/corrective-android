@@ -11,7 +11,7 @@ export const postLogin = createAsyncThunk<
 	let responseData: loginResponse;
   return axios
     .post<loginResponse>(
-      'https://wide-eyed-attire-mite.cyclic.app/auth/login',
+			process.env.EXPO_PUBLIC_API_URL +  '/auth/login',
       { email, password }
     )
     .then(response => {

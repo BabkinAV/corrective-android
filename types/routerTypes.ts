@@ -6,6 +6,7 @@ export type RootStackParamList = {
     unitNumber: string;
   };
   login: undefined;
+	about: undefined;
 };
 
 export type SearchUnitNavigationProp = DrawerScreenProps<

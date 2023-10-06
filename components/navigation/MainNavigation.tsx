@@ -18,6 +18,7 @@ import CustomDrawerContent from './CustomDrawerContent';
 import DocumentList from './screens/DocumentList';
 import Home from './screens/Home';
 import Login from './screens/Login';
+import About from './screens/About';
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -80,6 +81,11 @@ const MainNavigation = ({
           name="searchUnit"
           component={Home}
           options={{ title: 'Search unit' }}
+        />
+        <Drawer.Screen
+          name="about"
+          component={About}
+          options={{ title: 'About' }}
         />
         <Drawer.Screen
           name="documentList"
