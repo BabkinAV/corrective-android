@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
-import { ActivityIndicator, Divider } from 'react-native-paper';
-import InstructionItem from '../../UI/InstructionItem';
+import { ActivityIndicator, Divider, Text } from 'react-native-paper';
 import { instructionArray } from '../../../data';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { selectIsAuth } from '../../../store/reducers/authReducer';
 import {
-  resetSelected,
   selectDocuments,
   selectErrorFetching,
   selectIsDataLoading,
   selectSelectedDocumentIdsLength,
 } from '../../../store/reducers/documentsReducer';
-import { theme } from '../../../theme';
-import EditStatusFAB from '../../UI/EditStatusFAB';
-import { instructionStatus } from '../../../types/dataTypes';
-import ChangeStatusModal from '../../modals/ChangeStatusModal';
-import { selectIsAuth } from '../../../store/reducers/authReducer';
-import { updateStatus } from '../../../store/thunks/updateStatus';
-import { DocumentListProp } from '../../../types/routerTypes';
 import { fetchInstructionsById } from '../../../store/thunks/fetchInstructions';
+import { updateStatus } from '../../../store/thunks/updateStatus';
+import { theme } from '../../../theme';
+import { instructionStatus } from '../../../types/dataTypes';
+import { DocumentListProp } from '../../../types/routerTypes';
+import EditStatusFAB from '../../UI/EditStatusFAB';
+import InstructionItem from '../../UI/InstructionItem';
+import EditStatusSnackbar from '../../UI/editStatusSnackbar';
+import ChangeStatusModal from '../../modals/ChangeStatusModal';
+import { snackbarColor } from '../../../types/uiTypes';
 
 const DocumentList = ({ route, navigation }: DocumentListProp) => {
   const documents = useAppSelector(selectDocuments);
@@ -36,6 +36,16 @@ const DocumentList = ({ route, navigation }: DocumentListProp) => {
     instructionStatus | ''
   >('');
 
+  const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+
+  const [snackbarColor, setSnackbarColor] = useState<snackbarColor>('success');
+
+	const [isListRefreshing, setIsListRefreshing] = useState<boolean>(false)
+
+	const handleRefresh = () => {
+		dispatch(fetchInstructionsById(route.params.unitNumber));
+	}
+
   const handleActionItemPress = (status: instructionStatus) => {
     setIsUpdatingStatus(status);
   };
@@ -46,9 +56,13 @@ const DocumentList = ({ route, navigation }: DocumentListProp) => {
     )
       .unwrap()
       .then(() => {
+        setSnackbarColor('success');
+        setSnackbarMessage('Document status updates succesfully');
         dispatch(fetchInstructionsById(route.params.unitNumber));
       })
       .catch(err => {
+        setSnackbarColor('error');
+        setSnackbarMessage('Document status updates error');
         console.log('Error (in component) submitting!', err);
       })
       .finally(() => {
@@ -77,6 +91,8 @@ const DocumentList = ({ route, navigation }: DocumentListProp) => {
           <>
             <FlatList
               data={documents}
+							refreshing={false}
+							onRefresh={handleRefresh}
               renderItem={({ item, index }) => (
                 <>
                   <InstructionItem
@@ -102,6 +118,11 @@ const DocumentList = ({ route, navigation }: DocumentListProp) => {
               hideModal={() => setIsUpdatingStatus('')}
               documentSelectedNumber={selectedDocumentsIdsLength}
               handleYesButtonClick={handleYesButtonClick}
+            />
+            <EditStatusSnackbar
+              handleDismissSnackbar={() => setSnackbarMessage('')}
+              snackbarMessage={snackbarMessage}
+              snackbarColor={snackbarColor}
             />
             {selectedDocumentsIdsLength > 0 && (
               <EditStatusFAB handleActionItemPress={handleActionItemPress} />

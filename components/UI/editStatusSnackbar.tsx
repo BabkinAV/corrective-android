@@ -1,28 +1,41 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 import { Portal, Snackbar } from 'react-native-paper';
+import { snackbarColor } from '../../types/uiTypes';
+import { theme } from '../../theme';
 
-const editStatusSnackbar = ({
-  snackbarIsVisible,
+const EditStatusSnackbar = ({
   handleDismissSnackbar,
-	snackbarMessage
+  snackbarMessage,
+  snackbarColor,
 }: {
-  snackbarIsVisible: boolean;
   handleDismissSnackbar: () => void;
-	snackbarMessage: string
+  snackbarMessage: string;
+  snackbarColor: snackbarColor;
 }) => {
   return (
     <Portal>
       <Snackbar
-        visible={snackbarIsVisible}
+        visible={Boolean(snackbarMessage)}
         onDismiss={handleDismissSnackbar}
         action={{
           label: 'close',
+          textColor: '#fff',
         }}
       >
-        This is a Snackbar wrapped with Portal.
+        <Text
+          style={{
+            color:
+              snackbarColor === 'error'
+                ? theme.colors.red100
+                : theme.colors.green100,
+          }}
+        >
+          {snackbarMessage}
+        </Text>
       </Snackbar>
     </Portal>
   );
 };
 
-export default editStatusSnackbar;
+export default EditStatusSnackbar;

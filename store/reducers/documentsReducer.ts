@@ -70,7 +70,6 @@ export const documentsSlice = createSlice({
 			state.isDataLoading = true;
 		})
 		builder.addCase(updateStatus.fulfilled, (state, action) => {
-			console.log('Update succesfull! New statuses: ', action.payload);
 			state.selectedDocumentIds = [];
 			state.isDataLoading = false;
 		})
